@@ -5,33 +5,48 @@ import com.wei.springbootmall.dto.ProductQueryParams;
 import com.wei.springbootmall.dto.ProductRequest;
 import com.wei.springbootmall.model.Product;
 import com.wei.springbootmall.service.ProductService;
+import com.wei.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
+@Validated
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
+    public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
                                                      @RequestParam(required = false) String search,
                                                      @RequestParam(defaultValue = "created_date") String orderBy,
-                                                     @RequestParam(defaultValue = "desc") String sort) {
+                                                     @RequestParam(defaultValue = "desc") String sort,
+                                                     @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+                                                     @RequestParam(defaultValue = "0") @Min(0) Integer offset) {
 
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
         productQueryParams.setSort(sort);
+        productQueryParams.setLimit(limit);
+        productQueryParams.setOffset(offset);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts(productQueryParams));
+        Page<Product> page= new Page();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(productService.countProduct(productQueryParams));
+        page.setResults(productService.getProducts(productQueryParams));
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @GetMapping("/products/{productId}")
