@@ -18,5 +18,5 @@ public class User {
 
     private Date createdDate;
 
-    private Date lastModifieddate;
+    private Date lastModifiedDate;
 }
