@@ -1,6 +1,7 @@
 package com.wei.springbootmall.dao.impl;
 
 import com.wei.springbootmall.dao.UserDao;
+import com.wei.springbootmall.dto.UserLoginRequest;
 import com.wei.springbootmall.dto.UserRegisterRequest;
 import com.wei.springbootmall.model.User;
 import com.wei.springbootmall.rowmapper.UserRowMapper;

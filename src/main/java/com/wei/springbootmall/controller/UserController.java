@@ -1,5 +1,6 @@
 package com.wei.springbootmall.controller;
 
+import com.wei.springbootmall.dto.UserLoginRequest;
 import com.wei.springbootmall.dto.UserRegisterRequest;
 import com.wei.springbootmall.model.User;
 import com.wei.springbootmall.service.UserService;
@@ -35,5 +36,14 @@ public class UserController {
         User user = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
+        User user = userService.login(userLoginRequest);
+        if (user == null) {
+
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }
