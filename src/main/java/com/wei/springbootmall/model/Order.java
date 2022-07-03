@@ -11,6 +11,6 @@ public class Order {
     private Integer userId;
     private Integer totalAmount;
     private Date createdDate;
-    private Date lastModified_date;
+    private Date lastModifiedDate;
     private List<OrderItem> orderItemList;
 }
